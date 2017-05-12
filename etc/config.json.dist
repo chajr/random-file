@@ -1,0 +1,14 @@
+{
+    "directories": {
+        "group-one": {
+            
+        },
+        "group-two": {
+            
+        }
+    },
+    "config": {
+        "importantFilePrefix": "!",
+        "importantFileCheckout": "3"
+    }
+}
