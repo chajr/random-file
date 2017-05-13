@@ -14,7 +14,9 @@ class randomFile {
         $allFiles = [];
         $storedFiles = [];
 
-        $configData = file_get_contents('./etc/config.json');
+        $config = $args[2] ?? './etc/config.json';
+
+        $configData = file_get_contents($config);
         $this->config = json_decode($configData, true);
 
         $group = $args[1] ?? key($this->config['directories']);
