@@ -4,17 +4,22 @@
 (new randomFile($argv));
 
 class randomFile {
+    /**
+     * @var array
+     */
+    protected $config = [];
+
     public function __construct(array $args)
     {
         $allFiles = [];
         $storedFiles = [];
 
         $configData = file_get_contents('./etc/config.json');
-        $config = json_decode($configData, true);
+        $this->config = json_decode($configData, true);
 
-        $group = $args[1] ?? key($config['directories']);
+        $group = $args[1] ?? key($this->config['directories']);
 
-        foreach ($config['directories'][$group] as $directory) {
+        foreach ($this->config['directories'][$group] as $directory) {
             $paths = self::returnPaths(self::readDirectory($directory, true));
             $allFiles = array_merge($allFiles, $paths['file']);
         }
@@ -26,12 +31,30 @@ class randomFile {
             $storedFiles[] = $files['path'];
         }
 
-        $cleared = array_diff($allFiles, $storedFiles);
+        $cleared = array_values(array_diff($allFiles, $storedFiles));
+
+        if ($this->getImportantFile()) {
+            $importantList = [];
+            $prefix = $this->config['config']['importantFilePrefix'];
+
+            foreach ($cleared as $file) {
+                $fileInfo = new \SplFileInfo($file);
+                $isImportant = preg_match("/^$prefix.*/", $fileInfo->getFilename());
+
+                if ($isImportant) {
+                    $importantList[] = $file;
+                }
+            }
+
+            if (!empty($importantList)) {
+                $cleared = $importantList;
+            }
+        }
 
         $numberOfFiles = count($cleared);
         $rand = random_int(1, $numberOfFiles);
 
-        $randFile = $allFiles[$rand -1];
+        $randFile = $cleared[$rand -1];
 
         $storage[] = [
             'date' =>date('d-m-Y H:i:s'),
@@ -42,6 +65,24 @@ class randomFile {
         file_put_contents('./var/storage.json', $newStorage);
 
         echo "\n" . $randFile . "\n";
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getImportantFile () : bool
+    {
+        $randCheck = $this->config['config']['importantFileCheckout'];
+
+        for ($i = 0; $i < $randCheck; $i++) {
+            $rand = random_int(0, 1);
+
+            if ($rand === 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
