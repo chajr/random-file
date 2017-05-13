@@ -12,7 +12,7 @@ class randomFile {
         $configData = file_get_contents('./etc/config.json');
         $config = json_decode($configData, true);
 
-        $group = $args[1] ?? current($config['directories']);
+        $group = $args[1] ?? key($config['directories']);
 
         foreach ($config['directories'][$group] as $directory) {
             $paths = self::returnPaths(self::readDirectory($directory, true));
