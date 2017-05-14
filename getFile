@@ -26,7 +26,7 @@ class randomFile {
             $allFiles = array_merge($allFiles, $paths['file']);
         }
 
-        $generated = file_get_contents('./var/storage.json');
+        $generated = file_get_contents($this->config['config']['storage']);
         $storage = json_decode($generated, true);
 
         foreach ($storage as $files) {
@@ -64,7 +64,7 @@ class randomFile {
         ];
 
         $newStorage = json_encode($storage, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-        file_put_contents('./var/storage.json', $newStorage);
+        file_put_contents($this->config['config']['storage'], $newStorage);
 
         echo "\n" . $randFile . "\n";
     }
