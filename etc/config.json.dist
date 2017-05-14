@@ -1,7 +1,7 @@
 {
     "directories": {
         "group-one": {
-            
+            "1": "some_dir",
         },
         "group-two": {
             
@@ -9,6 +9,7 @@
     },
     "config": {
         "importantFilePrefix": "!",
-        "importantFileCheckout": "3"
+        "importantFileCheckout": "3",
+        "storage": "./var/storage.json"
     }
 }
