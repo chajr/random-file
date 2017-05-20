@@ -19,12 +19,13 @@ class randomFile {
         if (!file_exists($config)) {
             throw new ErrorException('Missing configuration file: ' . $config);
         }
-        if (!file_exists($this->config['config']['storage'])) {
-            throw new ErrorException('Missing storage file: ' . $this->config['config']['storage']);
-        }
 
         $configData = file_get_contents($config);
         $this->config = json_decode($configData, true);
+
+        if (!file_exists($this->config['config']['storage'])) {
+            throw new ErrorException('Missing storage file: ' . $this->config['config']['storage']);
+        }
 
         $group = $args[1] ?? key($this->config['directories']);
 
