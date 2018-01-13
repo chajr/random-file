@@ -1,14 +1,22 @@
 #!/usr/bin/env php
 <?php
 
-(new randomFile($argv));
+new RandomFile($argv);
 
-class randomFile {
+class RandomFile
+{
     /**
      * @var array
      */
     protected $config = [];
 
+    /**
+     * randomFile constructor.
+     *
+     * @param array $args
+     * @throws ErrorException
+     * @throws Exception
+     */
     public function __construct(array $args)
     {
         $allFiles = [];
@@ -74,13 +82,14 @@ class randomFile {
         $newStorage = json_encode($storage, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         file_put_contents($this->config['config']['storage'], $newStorage);
 
-        echo "\n" . $randFile . "\n";
+        echo '"' . $randFile . '"';
     }
 
     /**
      * @return bool
+     * @throws Exception
      */
-    protected function getImportantFile () : bool
+    protected function getImportantFile() : bool
     {
         $randCheck = $this->config['config']['importantFileCheckout'];
 
@@ -105,7 +114,7 @@ class randomFile {
      * @example readDirectory('dir/some_dir', TRUE)
      * @example readDirectory(); - read MAIN_PATH destination
      */
-    static function readDirectory(string $path, bool $whole = false) : array
+    public static function readDirectory(string $path, bool $whole = false) : array
     {
         $list = [];
 
@@ -146,7 +155,7 @@ class randomFile {
      * @example returnPaths($array, '', TRUE)
      * @example returnPaths($array, 'some_dir/dir', TRUE)
      */
-    static function returnPaths(array $array, bool $reverse = false) : array
+    public static function returnPaths(array $array, bool $reverse = false) : array
     {
         if ($reverse) {
             $array = array_reverse($array);
@@ -156,10 +165,8 @@ class randomFile {
 
         foreach ($array as $path => $fileInfo) {
             if (is_dir($path)) {
-
                 $list = self::returnPaths($fileInfo);
                 foreach ($list as $element => $value) {
-
                     if ($element === 'file') {
                         foreach ($value as $file) {
                             $pathList['file'][] = $file;
@@ -190,7 +197,7 @@ class randomFile {
      * @param string $path
      * @return boolean TRUE if exists, FALSE if not
      */
-    static function exist(string $path) : bool
+    public static function exist(string $path) : bool
     {
         return file_exists($path);
     }
