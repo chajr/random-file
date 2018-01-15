@@ -72,7 +72,7 @@ class RandomFile
         $numberOfFiles = count($cleared);
         $rand = random_int(1, $numberOfFiles);
 
-        $randFile = $cleared[$rand -1];
+        $randFile = $this->escape($cleared[$rand -1]);
 
         $storage[] = [
             'date' =>date('d-m-Y H:i:s'),
@@ -83,6 +83,15 @@ class RandomFile
         file_put_contents($this->config['config']['storage'], $newStorage);
 
         echo '"' . $randFile . '"';
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    protected function escape(string $path) : string
+    {
+        return str_replace('!', '\!', $path);
     }
 
     /**
