@@ -39,7 +39,7 @@ class RandomFile
 
         foreach ($this->config['directories'][$group] as $directory) {
             $paths = self::returnPaths(self::readDirectory($directory, true));
-            $allFiles = array_merge($allFiles, $paths['file']);
+            $allFiles += $paths['file'];
         }
 
         $generated = file_get_contents($this->config['config']['storage']);
@@ -174,7 +174,7 @@ class RandomFile
 
         foreach ($array as $path => $fileInfo) {
             if (is_dir($path)) {
-                $list = self::returnPaths($fileInfo);
+                $list = self::returnPaths((array)$fileInfo);
                 foreach ($list as $element => $value) {
                     if ($element === 'file') {
                         foreach ($value as $file) {
